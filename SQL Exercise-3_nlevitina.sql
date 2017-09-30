@@ -3,14 +3,14 @@ use AdventureWorksDW2012;
 
 /*1, Display number of orders and total sales amount(sum of SalesAmount) of Internet Sales 
 in 1st quarter each year in each country. Note: your result set should produce a total of 18 rows. */
-select count (i.SalesOrderNumber) as Number_of_Orders, sum (i.SalesAmount) as Total_Sales, t.SalesTerritoryCountry, d.CalendarYear
+select count (i.SalesOrderNumber) as Number_of_Orders, sum (i.SalesAmount) as Total_Sales, d.CalendarYear, t.SalesTerritoryCountry as Country
 from AdventureWorksDW2012.dbo.FactInternetSales as I
 join AdventureWorksDW2012.dbo.DimSalesTerritory as T
 on i.SalesTerritoryKey=t.SalesTerritoryKey
 join AdventureWorksDW2012.dbo.DimDate as D
 on d.DateKey=i.OrderDateKey
 where d.CalendarQuarter = '1'
-group by d.CalendarQuarter, d.CalendarYear, t.SalesTerritoryCountry
+group by d.CalendarYear, t.SalesTerritoryCountry
 
 
 /*2, Show total reseller sales amount (sum of SalesAmount), 
@@ -40,9 +40,9 @@ In comment, describe how you perform the slicing, i.e.
 what do you do to what dimension(s)? Why is it a operation of slicing?*/
 
 /*3 answer:
-Slicing is selecting a part of a cube (database) using value for one of a cube's dimentions. 
+Slicing is selecting a part of a cube (database) using a value for one of a cube's dimentions. 
 In this case it should be done using the 'where clause's value, i.e. year 2006. As a result the cube still has data 
-relevant to 2006 available in all the tables available.*/
+relevant to 2006 in all the available tables.*/
 
 /*4, Based on 2, perform an OLAP operation: drill-down. 
 In comment, describe how you perform the drill-down, 
@@ -50,5 +50,6 @@ i.e. what do you do to what dimension(s)? Why is it a operation of drilling-down
 
 /*4 answer:
 Drill-down is an opertion of narrowing down results going from a summary to  a more detailed view.
-In this case I would drill down using the 'order by' categories: first view the data by quarter, 
-then by Category or Business type (alternatively, first view by quarter, then by Business Type, then by Category).
+In this case one should drill down using the 'order by' categories: view the data by quarter, 
+then go deeper to see Category, down to Business type or choose a different order by which do drill down 
+(category->business type->quarter, or business type->quarter->category etc).
